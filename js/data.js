@@ -30,14 +30,14 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-let ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+const ids = Array.from(Array(DISCRIPTIONS_COUNT + 1).keys()).splice(1, DISCRIPTIONS_COUNT);
 
 function createDiscription() {
-  const newId = getRandom(0, ids.length);
-  ids = ids.splice(newId, 1);
+  const newIndex = getRandom(0, ids.length - 1);
+  const newId = ids.splice(newIndex, 1);
   return {
-    id: newId,
-    url: `photos/${newId}.jpg`,
+    id: newId[0],
+    url: `photos/${newId[0]}.jpg`,
     description: DISCRIPTIONS[getRandom(1, DISCRIPTIONS.length)],
     likes: getRandom(15, 200),
     comments: [{

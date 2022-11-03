@@ -1,6 +1,6 @@
 import {createDiscriptions} from './data.js';
+import {drawPictures} from './draw.js';
 
 const discriptions = createDiscriptions();
 
-// eslint-disable-next-line no-console
-console.log(discriptions);
+drawPictures(discriptions);
