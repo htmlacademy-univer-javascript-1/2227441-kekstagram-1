@@ -1,3 +1,5 @@
+import {addListener} from './big_picture.js';
+
 function drawPictures(discriptions) {
   const pictureTemplate = document.querySelector('#picture').content;
   const picturesListFragment = document.createDocumentFragment();
@@ -7,6 +9,7 @@ function drawPictures(discriptions) {
     newPicture.querySelector('.picture__img').src = discription.url;
     newPicture.querySelector('.picture__comments').textContent = discription.comments.length;
     newPicture.querySelector('.picture__likes').textContent = discription.likes;
+    addListener(newPicture, discription);
     picturesListFragment.appendChild(newPicture);
   });
 
