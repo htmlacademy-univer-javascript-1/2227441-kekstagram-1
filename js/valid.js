@@ -2,14 +2,14 @@ const form = document.querySelector('#upload-select-image');
 const textHashtags = document.querySelector('.text__hashtags');
 
 const pristine = new Pristine(form, {
-  classTo: 'img-upload__hashtags',
-  errorTextParent: 'img-upload__hashtags',
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__error-text',
 });
 
 function validHashtagsAmount(hashtags) {
   const text = hashtags.split(' ');
-  return text.length < 6 && text.length > 0;
+  return text.length < 6;
 }
 
 pristine.addValidator(
@@ -19,15 +19,12 @@ pristine.addValidator(
 );
 
 function validHashtags(hashtags) {
-  const re = /^#[A-Za-zА-яа-яЁё0-9]{1,19}$/;
-  hashtags.split(' ').forEach((hashtag) => {
-    if (!re.test(hashtag)) { return false; }
-  });
-  return true;
+  const re = /^#[A-Za-zА-яа-яЁё0-9]{1,19}( #[A-Za-zА-яа-яЁё0-9]{1,19}){0,4}$/;
+  return re.test(hashtags);
 }
 
 pristine.addValidator(
-  document.querySelector('.text__hashtags'),
+  textHashtags,
   validHashtags,
   'Некорректный хэштег'
 );
