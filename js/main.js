@@ -1,6 +1,6 @@
-import {createDiscriptions} from './data.js';
-import {drawPictures} from './draw.js';
+import './draw.js';
+import './imgUploadOverlay.js';
+import './valid.js';
+import { exitOnEsc } from './handlers.js';
 
-const discriptions = createDiscriptions();
-
-drawPictures(discriptions);
+document.addEventListener('keydown', exitOnEsc);
