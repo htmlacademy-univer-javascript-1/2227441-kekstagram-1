@@ -1,6 +1,9 @@
 import {addListener} from './big_picture.js';
+import {createDiscriptions} from './data.js';
 
-function drawPictures(discriptions) {
+const discriptions = createDiscriptions();
+
+function drawPictures() {
   const pictureTemplate = document.querySelector('#picture').content;
   const picturesListFragment = document.createDocumentFragment();
 
@@ -16,5 +19,7 @@ function drawPictures(discriptions) {
   const pictures = document.querySelector('.pictures');
   pictures.appendChild(picturesListFragment);
 }
+
+drawPictures(discriptions);
 
 export {drawPictures};
