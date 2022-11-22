@@ -1,5 +1,3 @@
-import { exitOnEsc } from './handlers.js';
-
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
 const inputFile = document.querySelector('#upload-file');
@@ -8,18 +6,25 @@ const uploadImage = document.querySelector('.img-upload__preview').querySelector
 let currentScale = 1;
 let currentEffect = 'original';
 
+inputFile.addEventListener('change', showImgUpload);
+
 // Открытие и закрытие оверлея
 function showImgUpload() {
+  document.body.addEventListener('keydown', closeOnEsc);
   cancelButton.addEventListener('click', closeImgUpload);
+
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
+
   uploadImage.style.transform = 'scale(1)';
 }
 
 function closeImgUpload() {
+  document.body.removeEventListener('keydown', closeOnEsc);
+  cancelButton.removeEventListener('click', closeImgUpload);
+
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  cancelButton.removeEventListener('click', closeImgUpload);
   inputFile.value = '';
   currentScale = 1;
   changeScale();
@@ -33,19 +38,13 @@ function closeOnEsc(evt) {
   }
 }
 
-inputFile.addEventListener('change', showImgUpload);
-
-document.addEventListener('keydown', closeOnEsc);
-
 // Обработка Esc при фокусе
 function disableEsc(elem) {
   elem.addEventListener('focus', () => {
     document.removeEventListener('keydown', closeOnEsc);
-    document.removeEventListener('keydown', exitOnEsc);
   });
   elem.addEventListener('blur', () => {
     document.addEventListener('keydown', closeOnEsc);
-    document.addEventListener('keydown', exitOnEsc);
   });
 }
 
