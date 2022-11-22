@@ -40,25 +40,21 @@ function createDiscription() {
     url: `photos/${newId[0]}.jpg`,
     description: DISCRIPTIONS[getRandom(1, DISCRIPTIONS.length)],
     likes: getRandom(15, 200),
-    comments: [{
-      id: getRandom(1, 10000),
-      avatar: `img/avatar-${getRandom(1, 6)}.svg`,
-      message: MESSAGES[getRandom(0, 5)],
-      name: NAMES[getRandom(0, NAMES.length)],
-    },
-    {
-      id: getRandom(1, 10000),
-      avatar: `img/avatar-${getRandom(1, 6)}.svg`,
-      message: MESSAGES[getRandom(0, 5)],
-      name: NAMES[getRandom(0, NAMES.length)],
-    },
-    {
-      id: getRandom(1, 10000),
-      avatar: `img/avatar-${getRandom(1, 6)}.svg`,
-      message: MESSAGES[getRandom(0, 5)],
-      name: NAMES[getRandom(0, NAMES.length)],
-    }],
+    comments: getComments(getRandom(3, 25)),
   };
+}
+
+function getComments(num) {
+  const result = [];
+  for (let i = 0; i < num; i++) {
+    result.push({
+      id: getRandom(1, 10000),
+      avatar: `img/avatar-${getRandom(1, 6)}.svg`,
+      message: MESSAGES[getRandom(0, 5)],
+      name: NAMES[getRandom(0, NAMES.length)],
+    });
+  }
+  return result;
 }
 
 function createDiscriptions() {
