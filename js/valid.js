@@ -20,7 +20,7 @@ pristine.addValidator(
 
 function validHashtags(hashtags) {
   const re = /^#[A-Za-zА-яа-яЁё0-9]{1,19}( #[A-Za-zА-яа-яЁё0-9]{1,19}){0,4}$/;
-  return re.test(hashtags);
+  return re.test(hashtags) || hashtags.length === 0;
 }
 
 pristine.addValidator(

@@ -4,7 +4,6 @@ const inputFile = document.querySelector('#upload-file');
 const uploadImage = document.querySelector('.img-upload__preview').querySelector('img');
 
 let currentScale = 1;
-let currentEffect = 'original';
 
 inputFile.addEventListener('change', showImgUpload);
 
@@ -12,6 +11,7 @@ inputFile.addEventListener('change', showImgUpload);
 function showImgUpload() {
   document.body.addEventListener('keydown', closeOnEsc);
   cancelButton.addEventListener('click', closeImgUpload);
+  overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
 
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -22,14 +22,14 @@ function showImgUpload() {
 function closeImgUpload() {
   document.body.removeEventListener('keydown', closeOnEsc);
   cancelButton.removeEventListener('click', closeImgUpload);
+  overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
 
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   inputFile.value = '';
   currentScale = 1;
   changeScale();
-  currentEffect = 'original';
-  changeEffect('original');
+  setEffect('none');
 }
 
 function closeOnEsc(evt) {
@@ -54,9 +54,9 @@ disableEsc(textHashtags);
 disableEsc(textDescription);
 
 // Обработка масшабирования
-const scaleBiggerButton = document.querySelector('.scale__control--bigger');
-const scaleSmallerButton = document.querySelector('.scale__control--smaller');
-const scaleValue = document.querySelector('.scale__control--value');
+const scaleBiggerButton = overlay.querySelector('.scale__control--bigger');
+const scaleSmallerButton = overlay.querySelector('.scale__control--smaller');
+const scaleValue = overlay.querySelector('.scale__control--value');
 
 function changeScale() {
   scaleValue.value = `${currentScale * 100}%`;
@@ -78,45 +78,108 @@ scaleSmallerButton.addEventListener('click', () => {
 });
 
 // Обработка эффектов
-const originalRadio = document.querySelector('#effect-none');
-const chromeRadio = document.querySelector('#effect-chrome');
-const sepiaRadio = document.querySelector('#effect-sepia');
-const marvinRadio = document.querySelector('#effect-marvin');
-const phobosRadio = document.querySelector('#effect-phobos');
-const heatRadio = document.querySelector('#effect-heat');
+const effectLevel = overlay.querySelector('.effect-level__value');
+const effectLevelElement = overlay.querySelector('.effect-level');
 
-function changeEffect(effect) {
-  if (currentEffect !== effect) {
-    uploadImage.classList.remove(`effects__preview--${currentEffect}`);
-    currentEffect = effect;
-    if (currentEffect !== 'original') {
-      uploadImage.classList.add(`effects__preview--${currentEffect}`);
+const sliderElement = overlay.querySelector('.effect-level__slider');
+const sliderFormat = {
+  to: function (value) {
+    if (Number.isInteger(value)) {
+      return value.toFixed(0);
+    }
+    return value.toFixed(1);
+  },
+  from: function (value) {
+    return parseFloat(value);
+  },
+};
+const sliderOptions = {
+  'none': {
+    range: {
+      min: 0,
+      max: 100,
+    }, step: 1, start: 100, format: sliderFormat,
+  },
+  'chrome': {
+    range: {
+      min: 0,
+      max: 1,
+    }, step: 0.1, start: 1, format: sliderFormat,
+  },
+  'sepia': {
+    range: {
+      min: 0,
+      max: 1,
+    }, step: 0.1, start: 1, format: sliderFormat,
+  },
+  'marvin': {
+    range: {
+      min: 0,
+      max: 100,
+    }, step: 1, start: 100,
+    format: {
+      to: function (value) {
+        return value / 100;
+      },
+      from: function (value) {
+        return parseFloat(value);
+      },
+    },
+  },
+  'phobos': {
+    range: {
+      min: 0,
+      max: 3,
+    }, step: 0.1, start: 3, format: sliderFormat,
+  },
+  'heat': {
+    range: {
+      min: 1,
+      max: 3,
+    }, step: 0.1, start: 3, format: sliderFormat,
+  }
+};
+const styleFilters = {
+  'chrome': 'grayscale',
+  'sepia': 'sepia',
+  'marvin': 'invert',
+  'phobos': 'blur',
+  'heat': 'brightness',
+};
+
+let checked = overlay.querySelector('#effect-none');
+noUiSlider.create(sliderElement, sliderOptions['none']);
+
+sliderElement.noUiSlider.on('update', () => {
+  effectLevel.value = `${sliderElement.noUiSlider.get()}`;
+  const filter = (checked.value === 'phobos') ? `${styleFilters[checked.value]}(${effectLevel.value}px)`
+    : `${styleFilters[checked.value]}(${effectLevel.value})`;
+  uploadImage.style.filter = filter;
+});
+
+
+function setEffect(effect) {
+  if (checked.value !== effect) {
+    uploadImage.classList.remove(`effects__preview--${checked.value}`);
+    checked.classList.remove('checked');
+    checked = overlay.querySelector(`#effect-${effect}`);
+    checked.classList.add('checked');
+    uploadImage.classList.add(`effects__preview--${checked.value}`);
+    sliderElement.noUiSlider.destroy();
+    noUiSlider.create(sliderElement, sliderOptions[effect]);
+    effectLevel.value = `${sliderElement.noUiSlider.get()}`;
+    if (checked.value !== 'none') {
+      effectLevelElement.classList.remove('hidden');
+    } else {
+      effectLevelElement.classList.add('hidden');
     }
   }
 }
 
-originalRadio.addEventListener('input', () => {
-  changeEffect('origianl');
-});
-
-chromeRadio.addEventListener('input', () => {
-  changeEffect('chrome');
-});
-
-sepiaRadio.addEventListener('input', () => {
-  changeEffect('sepia');
-});
-
-marvinRadio.addEventListener('input', () => {
-  changeEffect('marvin');
-});
-
-phobosRadio.addEventListener('input', () => {
-  changeEffect('phobos');
-});
-
-heatRadio.addEventListener('input', () => {
-  changeEffect('heat');
-});
+function onFilterChange(evt) {
+  if (evt.target.matches('input[type="radio"]')) {
+    setEffect(evt.target.value);
+  }
+}
 
 export {};
