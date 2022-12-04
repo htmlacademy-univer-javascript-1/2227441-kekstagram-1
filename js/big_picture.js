@@ -12,7 +12,7 @@ function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', closeOnEsc);
+  document.body.removeEventListener('keydown', closeOnEsc);
   bigPicture.querySelector('.big-picture__cancel').removeEventListener('click', closeBigPicture);
   loadCommentsButton.removeEventListener('click', loadCommentsListener);
 
@@ -33,7 +33,7 @@ function closeOnEsc(evt) {
 // Открытие в полноэкранном режиме, если нажали на миниатюру
 function addListener(picture, discription) {
   picture.querySelector('.picture__img').addEventListener('click', () => {
-    document.addEventListener('keydown', closeOnEsc);
+    document.body.addEventListener('keydown', closeOnEsc);
     bigPicture.querySelector('.big-picture__cancel').addEventListener('click', closeBigPicture);
 
     bigPicture.classList.remove('hidden');
