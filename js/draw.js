@@ -1,13 +1,10 @@
 import {addListener} from './big_picture.js';
-import {createDiscriptions} from './data.js';
 
-const discriptions = createDiscriptions();
-
-function drawPictures() {
+function drawPictures(pictures) {
   const pictureTemplate = document.querySelector('#picture').content;
   const picturesListFragment = document.createDocumentFragment();
 
-  discriptions.forEach((discription) => {
+  pictures.forEach((discription) => {
     const newPicture = pictureTemplate.cloneNode(true);
     newPicture.querySelector('.picture__img').src = discription.url;
     newPicture.querySelector('.picture__comments').textContent = discription.comments.length;
@@ -16,10 +13,8 @@ function drawPictures() {
     picturesListFragment.appendChild(newPicture);
   });
 
-  const pictures = document.querySelector('.pictures');
-  pictures.appendChild(picturesListFragment);
+  const picturesContainer = document.querySelector('.pictures');
+  picturesContainer.appendChild(picturesListFragment);
 }
-
-drawPictures(discriptions);
 
 export {drawPictures};

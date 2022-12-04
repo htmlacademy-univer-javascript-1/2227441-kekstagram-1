@@ -5,33 +5,6 @@ const uploadImage = document.querySelector('.img-upload__preview').querySelector
 
 let currentScale = 1;
 
-inputFile.addEventListener('change', showImgUpload);
-
-// Открытие и закрытие оверлея
-function showImgUpload() {
-  document.body.addEventListener('keydown', closeOnEsc);
-  cancelButton.addEventListener('click', closeImgUpload);
-  overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
-
-  overlay.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
-  uploadImage.style.transform = 'scale(1)';
-}
-
-function closeImgUpload() {
-  document.body.removeEventListener('keydown', closeOnEsc);
-  cancelButton.removeEventListener('click', closeImgUpload);
-  overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
-
-  overlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  inputFile.value = '';
-  currentScale = 1;
-  changeScale();
-  setEffect('none');
-}
-
 function closeOnEsc(evt) {
   if (evt.keyCode === 27) {
     closeImgUpload();
@@ -58,23 +31,22 @@ const scaleBiggerButton = overlay.querySelector('.scale__control--bigger');
 const scaleSmallerButton = overlay.querySelector('.scale__control--smaller');
 const scaleValue = overlay.querySelector('.scale__control--value');
 
-function changeScale() {
+function changeScale(num) {
+  currentScale = num;
   scaleValue.value = `${currentScale * 100}%`;
   uploadImage.style.transform = `scale(${currentScale})`;
 }
 
 scaleBiggerButton.addEventListener('click', () => {
   if (currentScale < 1) {
-    currentScale += 0.25;
+    changeScale(currentScale + 0.25);
   }
-  changeScale(currentScale);
 });
 
 scaleSmallerButton.addEventListener('click', () => {
   if (currentScale > 0.25) {
-    currentScale -= 0.25;
+    changeScale(currentScale - 0.25);
   }
-  changeScale();
 });
 
 // Обработка эффектов
@@ -147,28 +119,27 @@ const styleFilters = {
   'heat': 'brightness',
 };
 
-let checked = overlay.querySelector('#effect-none');
+let checkedRadio = overlay.querySelector('.effects__radio:checked');
 noUiSlider.create(sliderElement, sliderOptions['none']);
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevel.value = `${sliderElement.noUiSlider.get()}`;
-  const filter = (checked.value === 'phobos') ? `${styleFilters[checked.value]}(${effectLevel.value}px)`
-    : `${styleFilters[checked.value]}(${effectLevel.value})`;
+  const filter = (checkedRadio.value === 'phobos') ? `${styleFilters[checkedRadio.value]}(${effectLevel.value}px)`
+    : `${styleFilters[checkedRadio.value]}(${effectLevel.value})`;
   uploadImage.style.filter = filter;
 });
 
 
 function setEffect(effect) {
-  if (checked.value !== effect) {
-    uploadImage.classList.remove(`effects__preview--${checked.value}`);
-    checked.classList.remove('checked');
-    checked = overlay.querySelector(`#effect-${effect}`);
-    checked.classList.add('checked');
-    uploadImage.classList.add(`effects__preview--${checked.value}`);
-    sliderElement.noUiSlider.destroy();
-    noUiSlider.create(sliderElement, sliderOptions[effect]);
+  if (checkedRadio.value !== effect) {
+    uploadImage.classList.remove(`effects__preview--${checkedRadio.value}`);
+    uploadImage.style.filter = '';
+    //checkedRadio = overlay.querySelector(`#effect-${effect}`);
+    checkedRadio = overlay.querySelector('.effects__radio:checked');
+    uploadImage.classList.add(`effects__preview--${checkedRadio.value}`);
+    sliderElement.noUiSlider.updateOptions(sliderOptions[effect]);
     effectLevel.value = `${sliderElement.noUiSlider.get()}`;
-    if (checked.value !== 'none') {
+    if (checkedRadio.value !== 'none') {
       effectLevelElement.classList.remove('hidden');
     } else {
       effectLevelElement.classList.add('hidden');
@@ -182,4 +153,45 @@ function onFilterChange(evt) {
   }
 }
 
-export {};
+function resetForm() {
+  setEffect('none');
+  uploadImage.classList.remove(`effects__preview--${checkedRadio.value}`);
+  uploadImage.classList.add('effects__preview--none');
+  uploadImage.style.filter = '';
+  checkedRadio.checked = false;
+  checkedRadio = overlay.querySelector('#effect-none');
+  checkedRadio.checked = true;
+  changeScale(1);
+  textHashtags.value = '';
+  textDescription.value = '';
+}
+
+// Открытие и закрытие оверлея
+function showImgUpload() {
+  document.body.addEventListener('keydown', closeOnEsc);
+  cancelButton.addEventListener('click', closeImgUpload);
+  overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
+
+  overlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+
+  effectLevelElement.classList.add('hidden');
+
+  uploadImage.style.transform = 'scale(1)';
+  setEffect('none');
+}
+
+function closeImgUpload() {
+  document.body.removeEventListener('keydown', closeOnEsc);
+  cancelButton.removeEventListener('click', closeImgUpload);
+  overlay.querySelector('.img-upload__effects').removeEventListener('click', onFilterChange);
+
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  inputFile.value = '';
+  resetForm();
+}
+
+inputFile.addEventListener('change', showImgUpload);
+
+export { closeImgUpload };
