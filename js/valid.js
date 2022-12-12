@@ -24,8 +24,26 @@ pristine.addValidator(
   'Не больше 5 хэштегов'
 );
 
+function validHashtagsDifference(hashtags) {
+  const text = hashtags.split(' ').map((str) => str.toLowerCase());
+  return text.some(() => {
+    for (let i = 0; i < text.length; i++) {
+      if (text.indexOf(text[i]) !== i) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+pristine.addValidator(
+  textHashtags,
+  validHashtagsDifference,
+  'Повторяющиеся хештеги'
+);
+
 function validHashtags(hashtags) {
-  if (hashtags.split(' ').length < 6) {
+  if (hashtags.split(' ').length < 6 && validHashtagsDifference(hashtags)) {
     const re = /^#[A-Za-zА-яа-яЁё0-9]{1,19}( #[A-Za-zА-яа-яЁё0-9]{1,19}){0,4}$/;
     return re.test(hashtags) || hashtags.length === 0;
   }
@@ -81,6 +99,7 @@ function showErrorMessage() {
   const errorMessage = errorTemplate.cloneNode(true);
 
   document.body.appendChild(errorMessage);
+  document.querySelector('.error').style.zIndex = '100';
   document.querySelector('.error__button').addEventListener('click', closeErrorMessage);
   document.body.addEventListener('keydown', closeErrorOnEsc);
   document.body.addEventListener('click', closeErrorOnClick);
@@ -98,13 +117,13 @@ function closeErrorMessage() {
 
 function closeErrorOnEsc(evt) {
   if (evt.keyCode === 27) {
-    closeSuccessMessage();
+    closeErrorMessage();
   }
 }
 
 function closeErrorOnClick(evt) {
   if (!document.querySelector('.error__inner').isEqualNode(evt.target)) {
-    closeSuccessMessage();
+    closeErrorMessage();
   }
 }
 
@@ -114,12 +133,12 @@ form.addEventListener('submit', (evt) => {
     blockSubmitButton();
     sendData(
       () => {
-        closeImgUpload();
+        closeImgUpload(true);
         unblockSubmitButton();
         showSuccesMessage();
       },
       () => {
-        closeImgUpload();
+        closeImgUpload(false);
         unblockSubmitButton();
         showErrorMessage();
       },

@@ -1,7 +1,11 @@
 import {addListener} from './big_picture.js';
 
+const pictureTemplate = document.querySelector('#picture').content;
+
 function drawPictures(pictures) {
-  const pictureTemplate = document.querySelector('#picture').content;
+  document.querySelectorAll('.picture').forEach((picture) => {
+    picture.remove();
+  });
   const picturesListFragment = document.createDocumentFragment();
 
   pictures.forEach((discription) => {
