@@ -146,5 +146,3 @@ form.addEventListener('submit', (evt) => {
     );
   }
 });
-
-export {};
