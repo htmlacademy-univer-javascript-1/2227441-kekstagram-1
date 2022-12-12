@@ -168,6 +168,11 @@ function resetForm() {
 
 // Открытие и закрытие оверлея
 function showImgUpload() {
+  uploadImage.src = URL.createObjectURL(inputFile.files[0]);
+  document.querySelectorAll('.effects__preview').forEach((preview) => {
+    preview.style.backgroundImage = `url(${  URL.createObjectURL(inputFile.files[0])  })`;
+  });
+
   document.body.addEventListener('keydown', closeOnEsc);
   cancelButton.addEventListener('click', closeImgUpload);
   overlay.querySelector('.img-upload__effects').addEventListener('click', onFilterChange);
@@ -176,12 +181,9 @@ function showImgUpload() {
   document.body.classList.add('modal-open');
 
   effectLevelElement.classList.add('hidden');
-
-  uploadImage.style.transform = 'scale(1)';
-  setEffect('none');
 }
 
-function closeImgUpload() {
+function closeImgUpload(clearForm) {
   document.body.removeEventListener('keydown', closeOnEsc);
   cancelButton.removeEventListener('click', closeImgUpload);
   overlay.querySelector('.img-upload__effects').removeEventListener('click', onFilterChange);
@@ -189,7 +191,9 @@ function closeImgUpload() {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   inputFile.value = '';
-  resetForm();
+  if (clearForm) {
+    resetForm();
+  }
 }
 
 inputFile.addEventListener('change', showImgUpload);
