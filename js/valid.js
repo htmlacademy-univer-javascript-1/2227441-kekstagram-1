@@ -1,5 +1,5 @@
 import { sendData } from './api.js';
-import { closeImgUpload } from './imgUploadOverlay.js';
+import { closeImgUpload } from './img-upload-overlay.js';
 
 const form = document.querySelector('#upload-select-image');
 const textHashtags = document.querySelector('.text__hashtags');
@@ -39,7 +39,7 @@ function validHashtagsDifference(hashtags) {
 pristine.addValidator(
   textHashtags,
   validHashtagsDifference,
-  'Повторяющиеся хештеги'
+  'Повторяющиеся хэштеги'
 );
 
 function validHashtags(hashtags) {
@@ -66,20 +66,21 @@ function unblockSubmitButton() {
 
 function showSuccesMessage() {
   const successMessage = successTemplate.cloneNode(true);
-
+  successMessage.querySelector('.success__button').addEventListener('click', closeSuccessMessage);
   document.body.appendChild(successMessage);
-  document.querySelector('.success__button').addEventListener('click', closeSuccessMessage);
+
   document.body.addEventListener('keydown', closeSuccessOnEsc);
   document.body.addEventListener('click', closeSuccessOnClick);
   document.body.classList.add('modal-open');
 }
 
 function closeSuccessMessage() {
-  document.querySelector('.success').classList.add('hidden');
-  document.querySelector('.success__button').removeEventListener('click', closeSuccessMessage);
+  const successMessage = document.querySelector('.success');
+  successMessage.classList.add('hidden');
+  successMessage.querySelector('.success__button').removeEventListener('click', closeSuccessMessage);
   document.body.removeEventListener('keydown', closeSuccessOnEsc);
   document.body.removeEventListener('click', closeSuccessOnClick);
-  document.querySelector('.success').remove();
+  successMessage.remove();
   document.body.classList.remove('modal-open');
 }
 
@@ -97,26 +98,26 @@ function closeSuccessOnClick(evt) {
 
 function showErrorMessage() {
   const errorMessage = errorTemplate.cloneNode(true);
-
+  errorMessage.querySelector('.error__button').addEventListener('click', closeErrorMessage);
   document.body.appendChild(errorMessage);
-  document.querySelector('.error').style.zIndex = '100';
-  document.querySelector('.error__button').addEventListener('click', closeErrorMessage);
+
   document.body.addEventListener('keydown', closeErrorOnEsc);
   document.body.addEventListener('click', closeErrorOnClick);
   document.body.classList.add('modal-open');
 }
 
 function closeErrorMessage() {
-  document.querySelector('.error').classList.add('hidden');
-  document.querySelector('.error__button').removeEventListener('click', closeErrorMessage);
+  const errorMessage = document.querySelector('.error');
+  errorMessage.classList.add('hidden');
+  errorMessage.querySelector('.error__button').removeEventListener('click', closeErrorMessage);
   document.body.removeEventListener('keydown', closeErrorOnEsc);
   document.body.removeEventListener('click', closeErrorOnClick);
-  document.querySelector('.error').remove();
+  errorMessage.remove();
   document.body.classList.remove('modal-open');
 }
 
 function closeErrorOnEsc(evt) {
-  if (evt.keyCode === 27) {
+  if (evt.key === 'Escape') {
     closeErrorMessage();
   }
 }
