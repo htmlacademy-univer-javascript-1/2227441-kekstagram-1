@@ -1,5 +1,4 @@
 // Обработка эффектов
-//import { uploadImage } from './img-upload-overlay.js';
 const uploadImage = document.querySelector('.img-upload__preview').querySelector('img');
 const effectsSection = document.querySelector('.img-upload__effects');
 const effectLevelValue = document.querySelector('.effect-level__value');
@@ -18,6 +17,7 @@ const SLIDER_FORMAT = {
     return parseFloat(value);
   },
 };
+
 const SLIDER_OPTIONS = {
   'none': {
     range: {

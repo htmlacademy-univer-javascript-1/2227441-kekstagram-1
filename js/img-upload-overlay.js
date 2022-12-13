@@ -13,6 +13,7 @@ function resetForm() {
   changeScale(1);
   textHashtags.value = '';
   textDescription.value = '';
+  inputFile.value = '';
 }
 
 // Обработка Esc при фокусе
@@ -65,7 +66,6 @@ function closeImgUpload(clearForm) {
 
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  inputFile.value = '';
   if (clearForm) {
     resetForm();
   }
@@ -73,4 +73,4 @@ function closeImgUpload(clearForm) {
 
 inputFile.addEventListener('change', showImgUpload);
 
-export { closeImgUpload, uploadImage };
+export { closeImgUpload };

@@ -6,10 +6,6 @@ function getRandom(a, b) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function isCorrectString(comment, maxLength) {
-  return comment.legth <= maxLength;
-}
-
 function showAlert(message) {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -86,4 +82,4 @@ function throttle(callback, delayBetweenFrames) {
   };
 }
 
-export { getRandom, isCorrectString, showAlert, getRandomSubarray, debounce, throttle };
+export { showAlert, getRandomSubarray, debounce, throttle };

@@ -85,7 +85,7 @@ function closeSuccessMessage() {
 }
 
 function closeSuccessOnEsc(evt) {
-  if (evt.keyCode === 27) {
+  if (evt.key === 'Escape') {
     closeSuccessMessage();
   }
 }

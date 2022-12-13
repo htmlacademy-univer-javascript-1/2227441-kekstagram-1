@@ -1,9 +1,12 @@
 // Обработка масшабирования
-//import { uploadImage } from './img-upload-overlay.js';
 const uploadImage = document.querySelector('.img-upload__preview').querySelector('img');
 const scaleBiggerButton = document.querySelector('.scale__control--bigger');
 const scaleSmallerButton = document.querySelector('.scale__control--smaller');
 const scaleValue = document.querySelector('.scale__control--value');
+
+const SCALE_STEP = 0.25;
+const MAX_SCALE = 1;
+const MIN_SCALE = 0.25;
 
 let currentScale = 1;
 
@@ -14,14 +17,14 @@ function changeScale(num) {
 }
 
 scaleBiggerButton.addEventListener('click', () => {
-  if (currentScale < 1) {
-    changeScale(currentScale + 0.25);
+  if (currentScale < MAX_SCALE) {
+    changeScale(currentScale + SCALE_STEP);
   }
 });
 
 scaleSmallerButton.addEventListener('click', () => {
-  if (currentScale > 0.25) {
-    changeScale(currentScale - 0.25);
+  if (currentScale > MIN_SCALE) {
+    changeScale(currentScale - SCALE_STEP);
   }
 });
 
