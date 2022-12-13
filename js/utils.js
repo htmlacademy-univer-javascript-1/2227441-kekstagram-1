@@ -1,14 +1,10 @@
+const ALERT_SHOW_TIME = 5000;
+
 function getRandom(a, b) {
   const min = (a < b) ? a : b;
   const max = (a > b) ? a : b;
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-function isCorrectString(comment, maxLength) {
-  return comment.legth <= maxLength;
-}
-
-const ALERT_SHOW_TIME = 5000;
 
 function showAlert(message) {
   const alertContainer = document.createElement('div');
@@ -44,7 +40,7 @@ function getRandomSubarray(arr, size) {
 // Функция взята из интернета и доработана
 // Источник - https://www.freecodecamp.org/news/javascript-debounce-example
 
-function debounce (callback, timeoutDelay = 500) {
+function debounce(callback, timeoutDelay = 500) {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;
@@ -65,7 +61,7 @@ function debounce (callback, timeoutDelay = 500) {
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_throttle
 
-function throttle (callback, delayBetweenFrames) {
+function throttle(callback, delayBetweenFrames) {
   // Используем замыкания, чтобы время "последнего кадра" навсегда приклеилось
   // к возвращаемой функции с условием, тогда мы его сможем перезаписывать
   let lastTime = 0;
@@ -86,4 +82,4 @@ function throttle (callback, delayBetweenFrames) {
   };
 }
 
-export {getRandom, isCorrectString, showAlert, getRandomSubarray, debounce, throttle };
+export { showAlert, getRandomSubarray, debounce, throttle };

@@ -1,4 +1,4 @@
-import {addListener} from './big_picture.js';
+import { onPictureClick } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content;
 
@@ -13,7 +13,7 @@ function drawPictures(pictures) {
     newPicture.querySelector('.picture__img').src = discription.url;
     newPicture.querySelector('.picture__comments').textContent = discription.comments.length;
     newPicture.querySelector('.picture__likes').textContent = discription.likes;
-    addListener(newPicture, discription);
+    onPictureClick(newPicture, discription);
     picturesListFragment.appendChild(newPicture);
   });
 
@@ -21,4 +21,4 @@ function drawPictures(pictures) {
   picturesContainer.appendChild(picturesListFragment);
 }
 
-export {drawPictures};
+export { drawPictures };

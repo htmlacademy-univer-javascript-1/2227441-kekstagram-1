@@ -5,6 +5,8 @@ const commentCounter = bigPicture.querySelector('.social__comment-count');
 const comments = bigPicture.querySelector('.social__comments');
 const loadCommentsButton = bigPicture.querySelector('.comments-loader');
 
+const NUM_OF_ADD_COMMENTS = 5;
+
 let currentComment = 0;
 
 // Закрытие окна с изображением
@@ -25,13 +27,13 @@ function closeBigPicture() {
 }
 
 function closeOnEsc(evt) {
-  if (evt.keyCode === 27) {
+  if (evt.key === 'Escape') {
     closeBigPicture();
   }
 }
 
 // Открытие в полноэкранном режиме, если нажали на миниатюру
-function addListener(picture, discription) {
+function onPictureClick(picture, discription) {
   picture.querySelector('.picture__img').addEventListener('click', () => {
     document.body.addEventListener('keydown', closeOnEsc);
     bigPicture.querySelector('.big-picture__cancel').addEventListener('click', closeBigPicture);
@@ -54,16 +56,16 @@ function addListener(picture, discription) {
       commentNode.classList.add('hidden');
     });
 
-    show5Comments();
+    showMoreComments();
     loadCommentsButton.addEventListener('click', loadCommentsListener);
     document.body.classList.add('modal-open');
   });
 }
 
 // Показать еще 5 комментариев
-function show5Comments() {
+function showMoreComments() {
   let i = currentComment;
-  currentComment = (comments.children.length - i > 5) ? i + 5 : comments.children.length;
+  currentComment = (comments.children.length - i > NUM_OF_ADD_COMMENTS) ? i + NUM_OF_ADD_COMMENTS : comments.children.length;
   for (i; i < currentComment; i++) {
     comments.children[i].classList.remove('hidden');
   }
@@ -74,7 +76,7 @@ function show5Comments() {
 }
 
 function loadCommentsListener() {
-  show5Comments();
+  showMoreComments();
 }
 
-export {addListener};
+export { onPictureClick };
